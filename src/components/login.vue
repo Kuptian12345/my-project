@@ -35,8 +35,8 @@ export default {
       if (status === 200) {
         this.$message.success("恭喜你,登录成功");
         localStorage.setItem("token", token);
-        const aa = localStorage.getItem("token");
-        console.log(aa);
+        // const aa = localStorage.getItem("token");
+        // console.log(aa);
         this.$router.push({
           name: "home"
         });

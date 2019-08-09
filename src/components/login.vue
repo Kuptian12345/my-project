@@ -24,25 +24,46 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
-      this.$http
-        .post(`login`, this.formdata)
-        .then(res => {
-          const {
-            data: {
-              data,
-              meta: { msg, status }
-            }
-          } = res;
-          if (status === 200) {
-            this.$message.success("恭喜你,这是一条成功的消息");
-          } else {
-            this.$message.error("错了哦，这是一条错误消息");
-          }
-        })
-        .catch(err => {
-          console.log(err);
+    async handleLogin() {
+      const res = await this.$http.post(`login`, this.formdata);
+      const {
+        data: {
+          data: { token },
+          meta: { msg, status }
+        }
+      } = res;
+      if (status === 200) {
+        this.$message.success("恭喜你,登录成功");
+        localStorage.setItem("token", token);
+        const aa = localStorage.getItem("token");
+        console.log(aa);
+        this.$router.push({
+          name: "home"
         });
+      } else {
+        this.$message.error(msg);
+      }
+      // this.$http
+      //   .post(`login`, this.formdata)
+      //   .then(res => {
+      //     const {
+      //       data: {
+      //         data,
+      //         meta: { msg, status }
+      //       }
+      //     } = res
+      //     if (status === 200) {
+      //       this.$message.success('恭喜你,这是一条成功的消息')
+      //       this.$router.push({
+      //         name: 'home'
+      //       })
+      //     } else {
+      //       this.$message.error('错了哦，这是一条错误消息')
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
     }
   }
 };

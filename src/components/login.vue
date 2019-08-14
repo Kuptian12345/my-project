@@ -15,33 +15,33 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       formdata: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
-    };
+    }
   },
   methods: {
-    async handleLogin() {
-      const res = await this.$http.post(`login`, this.formdata);
+    async handleLogin () {
+      const res = await this.$http.post(`login`, this.formdata)
       const {
         data: {
           data: { token },
           meta: { msg, status }
         }
-      } = res;
+      } = res
       if (status === 200) {
-        this.$message.success("恭喜你,登录成功");
-        localStorage.setItem("token", token);
+        this.$message.success('恭喜你,登录成功')
+        localStorage.setItem('token', token)
         // const aa = localStorage.getItem("token");
         // console.log(aa);
         this.$router.push({
-          name: "home"
-        });
+          name: 'home'
+        })
       } else {
-        this.$message.error(msg);
+        this.$message.error(msg)
       }
       // this.$http
       //   .post(`login`, this.formdata)
@@ -66,7 +66,7 @@ export default {
       //   })
     }
   }
-};
+}
 </script>
 
 <style scoped>

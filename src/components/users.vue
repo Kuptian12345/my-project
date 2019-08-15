@@ -52,7 +52,14 @@
               size="mini"
               plain
             ></el-button>
-            <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
+            <el-button
+              @click="jueseshow(scope.row)"
+              type="success"
+              icon="el-icon-check"
+              circle
+              size="mini"
+              plain
+            ></el-button>
             <el-button
               type="danger"
               @click="opendelete(scope.row)"
@@ -117,6 +124,28 @@
         <el-button type="primary" @click="usersedit()">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 角色对话框 -->
+    <el-dialog title="角色分配" :visible.sync="dialogFormVisiblejuese">
+      <el-form label-position="left" label-width="80px" :model="formdata">
+        <el-form-item label="用户名">{{formdata.username}}</el-form-item>
+        <el-form-item label="角色">
+          {{selectVal}}
+          <el-select v-model="selectVal" placeholder="请选择角色">
+            <el-option disabled label="请选择" :value="-1"></el-option>
+            <el-option
+              v-for="(item,i) in roles"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisiblejuese = false">取 消</el-button>
+        <el-button type="primary" @click="jueseAdd()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -131,12 +160,17 @@ export default {
       list: [],
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
+      dialogFormVisiblejuese: false,
       formdata: {
         username: "",
         password: "",
         email: "",
         mobile: ""
-      }
+      },
+      // 角色分配下拉选数据
+      selectVal: -1,
+      currUserId: "",
+      roles: []
     };
   },
   created() {
@@ -145,6 +179,31 @@ export default {
   },
 
   methods: {
+    // 角色添加确定按钮
+    async jueseAdd() {
+      const res = await this.$http.put(`users/${this.currUserId}/role`, {
+        rid: this.selectVal
+      });
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status === 200) {
+        // 关闭对话框
+        this.dialogFormVisiblejuese = false;
+      }
+    },
+    // 角色点击对勾按钮
+    async jueseshow(user) {
+      this.formdata = user;
+      this.currUserId = user.id;
+      this.dialogFormVisiblejuese = true;
+      // 获取角色名称
+      const res = await this.$http.get(`roles`);
+      this.roles = res.data.data;
+      // 下拉选的id=selectVal
+      const res2 = await this.$http.get(`users/${user.id}`);
+      this.selectVal = res2.data.data.rid;
+    },
     // 修改用户状态
     async stateschange(user) {
       const res = await this.$http.put(

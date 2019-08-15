@@ -93,28 +93,28 @@
 
 <script>
 export default {
-  beforeMount() {
-    if (!localStorage.getItem("token")) {
+  beforeMount () {
+    if (!localStorage.getItem('token')) {
       this.$router.push({
-        name: "login"
-      });
+        name: 'login'
+      })
     }
-    this.$message.warning("请先登录");
+    this.$message.warning('请先登录')
   },
   methods: {
-    tuichu() {
+    tuichu () {
       // 清除token
-      localStorage.clear("token");
+      localStorage.clear('token')
 
       // 跳转login
       this.$router.push({
-        name: "login"
-      });
+        name: 'login'
+      })
       // 提示
-      this.$message.warning("退出成功");
+      this.$message.warning('退出成功')
     }
   }
-};
+}
 </script>
 
 <style>
